@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
 import Addtask from "./pages/Addtask";
 import Home from "./pages/Home";
-import Update from "./pages/Updatetask";
+// import Update from "./pages/Updatetask";
 
 export default function App() {
   const [task, setTask] = React.useState([]);
@@ -15,7 +15,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home task={task} setTask={setTask} />} />
         <Route path="/add" element={<Addtask />} />
-        <Route path="/update/:id" element={<Update />} />
+        {/* <Route path="/update/:id" element={<Update />} /> */}
       </Routes>
       <ToastContainer position="top-center" autoClose={2000} />
     </Router>

@@ -12,15 +12,21 @@ import { toast } from "react-toastify";
 const Navbar = ({ task, setTask }) => {
   const navigate = useNavigate();
   const deleteTask = async () => {
-    return await axios
-      .delete(`http://localhost:5001/completed`)
-      .then((response) => {
-        setTask((prev) => prev.filter((t) => t.completed === false));
-        toast.success(response.data.message || "operation successful");
-      })
-      .catch((error) =>
-        toast.error(response.data.message || "something wrong")
-      );
+    if (task.length === 0) {
+      return toast.error("No task to be deleted.");
+    }
+    const confirmation = confirm("Want to delete completed tasks?");
+    if (confirmation) {
+      return await axios
+        .delete(`http://localhost:5001/completed`)
+        .then((response) => {
+          setTask((prev) => prev.filter((t) => t.completed === false));
+          toast.success(response.data.message || "operation successful");
+        })
+        .catch((error) =>
+          toast.error(response.data.message || "something wrong")
+        );
+    }
   };
 
   const showIncomplete = async () => {
@@ -32,9 +38,16 @@ const Navbar = ({ task, setTask }) => {
       })
       .catch((error) => toast.error(error.response.data.message));
   };
+
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   return (
     <div className="md:grid md:grid-cols-2 flex flex-col items-center md:p-2 p-4 bg-blue-200">
-      <Link to={"/"}>Task manager</Link>
+      <Link to={"/"} onClick={refreshPage}>
+        Task manager
+      </Link>
       <section className="flex gap-1.5 justify-end">
         <button
           onClick={deleteTask}
