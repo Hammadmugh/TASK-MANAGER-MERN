@@ -3,13 +3,14 @@ import { FaTrashAlt } from "react-icons/fa";
 import axios from "axios";
 
 import { toast } from "react-toastify";
+import axiosInstance from "../utils/axiosInstance";
 
 const Card = ({ task, wholetask }) => {
   const deleteTask = async (id) => {
     const confirmation = confirm("Want to delete the task?");
     if (confirmation) {
-      return await axios
-        .delete(`http://localhost:5001/task/${id}`)
+      return await axiosInstance
+        .delete(`/task/${id}`)
         .then((response) => {
           wholetask((prev) => prev.filter((t) => t._id !== id));
           toast.success(response.data.message);
@@ -27,8 +28,8 @@ const Card = ({ task, wholetask }) => {
     );
 
     try {
-      await axios
-        .put(`http://localhost:5001/task/${task._id}`, {
+      await axiosInstance
+        .put(`/task/${task._id}`, {
           [name]: updatedValue,
         })
         .then((response) => {

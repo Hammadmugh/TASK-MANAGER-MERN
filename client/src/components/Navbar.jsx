@@ -1,24 +1,32 @@
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import { FaTrashAlt } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { BiShow } from "react-icons/bi";
+import { CiLogout } from "react-icons/ci";
 
 import { toast } from "react-toastify";
+import axiosInstance from "../utils/axiosInstance";
 
 const Navbar = ({ task, setTask }) => {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+    navigate("/login");
+  };
+
   const deleteTask = async () => {
     if (task.length === 0) {
       return toast.error("No task to be deleted.");
     }
     const confirmation = confirm("Want to delete completed tasks?");
     if (confirmation) {
-      return await axios
-        .delete(`http://localhost:5001/completed`)
+      return await axiosInstance
+        .delete(`/completed`)
         .then((response) => {
           setTask((prev) => prev.filter((t) => t.completed === false));
           toast.success(response.data.message || "operation successful");
@@ -30,8 +38,8 @@ const Navbar = ({ task, setTask }) => {
   };
 
   const showIncomplete = async () => {
-    return await axios
-      .get(`http://localhost:5001/incomplete`)
+    return await axiosInstance
+      .get(`/incomplete`)
       .then((response) => {
         setTask((prev) => prev.filter((t) => t.completed === false));
         toast.success(response.data.message);
@@ -40,7 +48,7 @@ const Navbar = ({ task, setTask }) => {
   };
 
   function refreshPage() {
-    window.location.reload(false);
+    window.location.reload();
   }
 
   return (
@@ -68,6 +76,13 @@ const Navbar = ({ task, setTask }) => {
         >
           <BiShow />
           INCOMPLETE
+        </button>
+        <button
+          onClick={handleLogout}
+          className="flex font-light text-sm justify-center items-center p-1 rounded-md bg-blue-400 gap-0.5 cursor-pointer"
+        >
+          <CiLogout />
+          LOGOUT
         </button>
       </section>
     </div>

@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import { MdOutlineDone } from "react-icons/md";
-import { RxCrossCircled } from "react-icons/rx";
 
 import Card from "../components/Card";
+import axiosInstance from "../utils/axiosInstance";
 
 const Home = ({ task, setTask }) => {
   useEffect(() => {
     const fetchdata = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5001/tasks");
+        const { data } = await axiosInstance.get("/tasks");
         setTask(data);
       } catch (error) {
         console.error(error);

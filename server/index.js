@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import taskRoute from "./router/taskRoute.js";
+import taskRoute from "./routers/taskRoute.js";
+import userRoute from "./routers/userRoute.js";
 
 import "./config/db.js";
 
@@ -10,6 +11,7 @@ const App = express();
 App.use(express.json());
 App.use(cors());
 
+App.use(userRoute);
 App.use(taskRoute);
 
 const port = process.env.PORT || 3000;

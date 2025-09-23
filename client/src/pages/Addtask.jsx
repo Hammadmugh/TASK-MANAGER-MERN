@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
+import axiosInstance from "../utils/axiosInstance";
 
 const Addtask = () => {
   const [task, settask] = useState({
@@ -22,8 +23,8 @@ const Addtask = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios
-      .post("http://localhost:5001/add", task)
+    const res = await axiosInstance
+      .post("/add", task)
       .then((res) => {
         toast.success(res.data.message);
         navigate("/");

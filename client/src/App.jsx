@@ -5,16 +5,35 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
 import Addtask from "./pages/Addtask";
 import Home from "./pages/Home";
-// import Update from "./pages/Updatetask";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 export default function App() {
   const [task, setTask] = React.useState([]);
+  const token = localStorage.getItem("token");
   return (
     <Router>
-      <Navbar task={task} setTask={setTask} />
+      {token ? <Navbar task={task} setTask={setTask} /> : null}
       <Routes>
-        <Route path="/" element={<Home task={task} setTask={setTask} />} />
-        <Route path="/add" element={<Addtask />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home task={task} setTask={setTask} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add"
+          element={
+            <ProtectedRoute>
+              <Addtask />
+            </ProtectedRoute>
+          }
+        />
         {/* <Route path="/update/:id" element={<Update />} /> */}
       </Routes>
       <ToastContainer position="top-center" autoClose={2000} />
