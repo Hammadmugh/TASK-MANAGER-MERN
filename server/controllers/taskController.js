@@ -39,11 +39,11 @@ const incompleteTask = async (req, res) => {
   try {
     const data = await Task.find({ completed: false, user: req.user.id });
     const alldata = await Task.find({ user: req.user.id });
+    if (alldata.length === 0) {
+      return res.status(200).json({ message: "Nothing found at all" });
+    }
     if (data.length === 0) {
       return res.status(200).json({ message: "All tasks completed" });
-    }
-    if (!alldata) {
-      return res.status(200).json({ message: "Nothing found at all" });
     }
     res.status(200).json({ message: "Incomplete task(s)" });
   } catch (error) {

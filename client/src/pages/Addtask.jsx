@@ -26,6 +26,10 @@ const Addtask = () => {
     const res = await axiosInstance
       .post("/add", task)
       .then((res) => {
+        if (res.data.message === "Please add task") {
+          toast.error(res.data.message);
+          return navigate("/");
+        }
         toast.success(res.data.message);
         navigate("/");
       })

@@ -18,6 +18,9 @@ const Signup = () => {
     e.preventDefault();
     try {
       const data = await axiosInstance.post("/register", formData);
+      if (data.data.message.includes("exists")) {
+        return toast.error(data.data.message);
+      }
       toast.success(data.data.message);
       if (data.data.message.includes("registered")) {
         const token = await axiosInstance.post("/login", {

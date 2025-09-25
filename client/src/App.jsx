@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import PublicRoute from "./components/PublicRoute";
 
 export default function App() {
   const [task, setTask] = React.useState([]);
@@ -16,8 +17,24 @@ export default function App() {
     <Router>
       {token ? <Navbar task={task} setTask={setTask} /> : null}
       <Routes>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
         <Route
           path="/"
           element={
