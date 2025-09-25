@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,18 +17,19 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post("/register", formData);
-
-      const loginRes = await axiosInstance.post("/login", {
-        email: formData.email,
-        password: formData.password,
-      });
-
-      localStorage.setItem("token", loginRes.data.token);
-
-      navigate("/");
+      const data = await axiosInstance.post("/register", formData);
+      toast.success(data.data.message);
+      if (data.data.message.includes("registered")) {
+        const token = await axiosInstance.post("/login", {
+          email: formData.email,
+          password: formData.password,
+        });
+        localStorage.setItem("token", token.data.token);
+        navigate("/");
+        toast.success(token.data.message);
+      }
     } catch (error) {
-      toast.error(error.response.data.message || "Error signing up");
+      console.log(error);
     }
   };
   return (

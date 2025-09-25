@@ -4,8 +4,11 @@ import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,15 +17,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axiosInstance.post("/login", formData);
-      if (res.data.message === "Invalid Credentials")
-        return toast.success(res.data.message);
-      localStorage.setItem("token", res.data.token);
-      toast.success(res.data.message);
-
-      navigate("/");
+      const data = await axiosInstance.post("/login", formData);
+      localStorage.setItem("token", data.data.token);
+      if (data.data.token) {
+        navigate("/");
+        toast.success(data.data.message);
+      } else {
+        navigate("/login");
+        toast.success(data.data.message);
+      }
     } catch (error) {
-      toast.error(error.response || "Invalid credentials");
+      console.log(error);
     }
   };
 

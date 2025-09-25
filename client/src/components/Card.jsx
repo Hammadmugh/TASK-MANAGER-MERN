@@ -1,6 +1,4 @@
-import React from "react";
 import { FaTrashAlt } from "react-icons/fa";
-import axios from "axios";
 
 import { toast } from "react-toastify";
 import axiosInstance from "../utils/axiosInstance";

@@ -11,16 +11,16 @@ const register = async (req, res) => {
       return res.status(200).json({ message: "Invalid email format" });
     }
     const hashedPassword = await bcrypt.hash(password, 8);
+    const registered = await User.findOne({ email });
+    if (registered) {
+      return res.status(200).json({ message: `User already exists` });
+    }
     const newUser = await User.create({
       email,
       password: hashedPassword,
     });
-    const registered = await User.findOne({ email });
-    if (registered) {
-      return res.status(200).json({ message: `Email already exists` });
-    }
     await newUser.save();
-    res.status(200).json({ message: `User registered with email ${email}` });
+    res.status(200).json({ message: `${email} registered` });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: `User already exists` });
